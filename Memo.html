@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arvaa Boutique - Payment Memo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Arvaa Boutique - Payment Memo Generator</h1>
+        
+        <div class="input-section">
+            <h2>Customer Information</h2>
+            <div class="form-group">
+                <label for="customerName">Customer Name:</label>
+                <input type="text" id="customerName" placeholder="Enter customer name" onchange="updateMemo()" required>
+            </div>
+            <div class="form-group">
+                <label for="customerAddress">Address:</label>
+                <input type="text" id="customerAddress" placeholder="Enter customer address" onchange="updateMemo()" required>
+            </div>
+            <div class="form-group">
+                <label for="customerPhone">Phone Number:</label>
+                <input type="text" id="customerPhone" placeholder="Enter phone number" onchange="updateMemo()" required>
+            </div>
+            <div class="form-group">
+                <label for="orderNumber">Order Number:</label>
+                <input type="text" id="orderNumber" placeholder="Enter order number" onchange="updateMemo()" required>
+            </div>
+            <div class="form-group">
+                <label for="orderDate">Order Date:</label>
+                <input type="date" id="orderDate" onchange="updateMemo()" required>
+            </div>
+            
+            <h2>Products</h2>
+            <div id="productsContainer">
+                <!-- Product rows will be added here dynamically -->
+            </div>
+            <button onclick="addProduct()">+ Add Another Product</button>
+            
+            <h2>Payment Details</h2>
+            <div class="form-group">
+                <label for="deliveryCharge">Delivery Charge:</label>
+                <input type="number" id="deliveryCharge" placeholder="Enter delivery charge" min="0" step="0.01" value="0" onchange="updateMemo()" required>
+            </div>
+            <div class="form-group">
+                <label for="paidAmount">Paid Amount:</label>
+                <input type="number" id="paidAmount" placeholder="Enter paid amount" min="0" step="0.01" value="0" onchange="updateMemo()" required>
+            </div>
+            
+            <button onclick="updateMemo()">Update Memo Preview</button>
+            <button class="clear-btn" onclick="clearForm()">Clear Form</button>
+            <button class="print-btn" onclick="printMemo()">Print Memo</button>
+        </div>
+        
+        <div class="preview-section">
+            <div class="memo-preview" id="memoPreview">
+                <div class="memo-header">
+                    <div class="logo-container" id="logoContainer">
+                        <!-- Pre-set logo will appear here -->
+                    </div>
+                    <div class="memo-title">Arvaa Boutique</div>
+                    <div class="memo-subtitle">Cash Memo</div>
+                    <div><strong>Order & Payment Summary</strong></div>
+                </div>
+                
+                <div class="dotted-line"></div>
+                
+                <div class="customer-details">
+                    <div><strong>Customer's Name:</strong> <span id="previewName">_______________</span></div>
+                    <div><strong>Address:</strong> <span id="previewAddress">_______________</span></div>
+                    <div class="dotted-line"></div>
+                    <div><strong>Phone:</strong> <span id="previewPhone">_______________</span></div>
+                    <div><strong>Order Number:</strong> <span id="previewOrderNumber">_______________</span></div>
+                    <div><strong>Order Date:</strong> <span id="previewOrderDate">_______________</span></div>
+                    <div class="dotted-line"></div>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>SLNo.</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price (per unit)</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="previewProducts">
+                        <!-- Product rows will be added here dynamically -->
+                    </tbody>
+                </table>
+                
+                <div class="totals">
+                    <div class="total-row">
+                        <strong>Subtotal:</strong> <span id="previewSubtotal">0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>Delivery Charge:</strong> <span id="previewDelivery">0.00</span>
+                    </div>
+                    <div class="total-row total-amount">
+                        <strong>Total Amount:</strong> <span id="previewTotal">0.00</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>Paid Amount:</strong> <span id="previewPaid">0.00</span>
+                    </div>
+                    <div class="total-row due-amount">
+                        <strong>Due Amount:</strong> <span id="previewDue">0.00</span>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="dotted-line"></div>
+                <br>
+                <br>
+                <br>
+                <br><br><br><br><br><br>
+                <div class="signatures">
+                    <div class="signature-box">
+                        Signature of Customer
+                    </div>
+                    <div class="signature-box">
+                        Signature of Proprietor
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('orderDate').valueAsDate = new Date();
+        
+        // Initialize with one product row
+        addProduct();
+        
+        function setLogo() {
+            const logoContainer = document.getElementById('logoContainer');
+            logoContainer.innerHTML = ""; // previous content clear
+
+            const img = document.createElement('img');
+            img.src = "logo.jpg"; // your logo image
+            img.alt = "Logo";
+            img.style.width = "150px";
+            img.style.height = "auto";
+            img.style.display = "block";
+            img.style.margin = " auto";
+
+        logoContainer.appendChild(img);
+}
+
+        // Add a new product row
+        function addProduct() {
+            const container = document.getElementById('productsContainer');
+            
+            const productRow = document.createElement('div');
+            productRow.className = 'product-row';
+            productRow.innerHTML = `
+                <input type="text" class="product-name" placeholder="Product Name" onchange="updateMemo()" required>
+                <input type="number" class="product-quantity" placeholder="Quantity" min="1" value="1" onchange="updateMemo()" required>
+                <input type="number" class="product-price" placeholder="Price per unit" min="0" step="0.01" onchange="updateMemo()" required>
+                <button class="remove-btn" onclick="removeProduct(this)">X</button>
+            `;
+            
+            container.appendChild(productRow);
+        }
+        
+        // Remove a product row
+        function removeProduct(button) {
+            if (document.getElementById('productsContainer').children.length > 1) {
+                button.parentElement.remove();
+                updateMemo();
+            } else {
+                alert("You need at least one product!");
+            }
+        }
+        
+        // Calculate the total amount
+        function calculateTotal() {
+            const productRows = document.querySelectorAll('.product-row');
+            let subtotal = 0;
+            
+            productRows.forEach(row => {
+                const quantity = parseFloat(row.querySelector('.product-quantity').value) || 0;
+                const price = parseFloat(row.querySelector('.product-price').value) || 0;
+                subtotal += quantity * price;
+            });
+            
+            const deliveryCharge = parseFloat(document.getElementById('deliveryCharge').value) || 0;
+            const totalAmount = subtotal + deliveryCharge;
+            
+            document.getElementById('previewSubtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('previewDelivery').textContent = deliveryCharge.toFixed(2);
+            document.getElementById('previewTotal').textContent = totalAmount.toFixed(2);
+            
+            // Recalculate due amount
+            calculateDue();
+            
+            return totalAmount;
+        }
+        
+        // Calculate the due amount
+        function calculateDue() {
+            const totalAmount = parseFloat(document.getElementById('previewTotal').textContent) || 0;
+            const paidAmount = parseFloat(document.getElementById('paidAmount').value) || 0;
+            const dueAmount = Math.max(0, totalAmount - paidAmount);
+            
+            document.getElementById('previewPaid').textContent = paidAmount.toFixed(2);
+            document.getElementById('previewDue').textContent = dueAmount.toFixed(2);
+            
+            return dueAmount;
+        }
+        
+        // Update the memo preview
+        function updateMemo() {
+            // Customer details
+            document.getElementById('previewName').textContent = document.getElementById('customerName').value || '_______________';
+            document.getElementById('previewAddress').textContent = document.getElementById('customerAddress').value || '_______________';
+            document.getElementById('previewPhone').textContent = document.getElementById('customerPhone').value || '_______________';
+            document.getElementById('previewOrderNumber').textContent = document.getElementById('orderNumber').value || '_______________';
+            
+            // Format dates
+            const orderDate = document.getElementById('orderDate').value;
+            
+            document.getElementById('previewOrderDate').textContent = orderDate ? formatDate(orderDate) : '_______________';
+            
+            // Products
+            const productRows = document.querySelectorAll('.product-row');
+            const previewProducts = document.getElementById('previewProducts');
+            previewProducts.innerHTML = '';
+            
+            productRows.forEach((row, index) => {
+                const name = row.querySelector('.product-name').value || '_______________';
+                const quantity = parseInt(row.querySelector('.product-quantity').value) || 0;
+                const price = parseFloat(row.querySelector('.product-price').value) || 0;
+                const total = quantity * price;
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${name}</td>
+                    <td>${quantity}</td>
+                    <td>${price.toFixed(2)}</td>
+                    <td>${total.toFixed(2)}</td>
+                `;
+                
+                previewProducts.appendChild(tr);
+            });
+            
+            // Calculate totals
+            calculateTotal();
+        }
+        
+        // Format date to DD/MM/YYYY
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Clear the form
+        function clearForm() {
+            if (confirm("Are you sure you want to clear all form data?")) {
+                // Reset form inputs
+                document.getElementById('customerName').value = '';
+                document.getElementById('customerAddress').value = '';
+                document.getElementById('customerPhone').value = '';
+                document.getElementById('orderNumber').value = '';
+                document.getElementById('orderDate').valueAsDate = new Date();
+                document.getElementById('deliveryCharge').value = '0';
+                document.getElementById('paidAmount').value = '0';
+                
+                // Reset products
+                const productsContainer = document.getElementById('productsContainer');
+                productsContainer.innerHTML = '';
+                addProduct();
+                
+                // Update preview
+                updateMemo();
+            }
+        }
+        
+        // Print the memo
+        function printMemo() {
+            window.print();
+        }
+        
+        // Initialize the memo preview and logo
+        setLogo();
+        updateMemo();
+    </script>
+</body>
+</html>

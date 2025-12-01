@@ -1,0 +1,266 @@
+ * {
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .preview-section {
+            flex: 1;
+            min-width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            width: 100%;
+        }
+        
+        h2 {
+            color: #444;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        input:required {
+            border-left: 3px solid #5cb85c;
+        }
+        
+        button {
+            background-color: #4a4a4a;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        button:hover {
+            background-color: #333;
+        }
+        
+        .product-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .product-row input {
+            flex: 1;
+        }
+        
+        .remove-btn {
+            background-color: #d9534f;
+            width: auto;
+            padding: 8px 12px;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c9302c;
+        }
+        
+        .memo-preview {
+            border: 1px solid #ddd;
+            padding: 25px;
+            background: white;
+            min-height: 600px;
+        }
+        
+        .memo-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-container {
+            width: 150px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ccc;
+        }
+        
+        .logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .memo-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .memo-subtitle {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .customer-details {
+            margin-bottom: 20px;
+        }
+        
+        .customer-details div {
+            margin-bottom: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .totals {
+            margin-top: 20px;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding: 5px 0;
+        }
+        
+        .total-row.total-amount {
+            font-weight: bold;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        
+        .due-amount {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .signature-box {
+            width: 45%;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            text-align: center;
+        }
+        
+        .print-btn {
+            background-color: #5cb85c;
+            margin-top: 20px;
+        }
+        
+        .print-btn:hover {
+            background-color: #4cae4c;
+        }
+        
+        .clear-btn {
+            background-color: #f0ad4e;
+            margin-top: 10px;
+        }
+        
+        .clear-btn:hover {
+            background-color: #ec971f;
+        }
+        
+        .dotted-line {
+            border-bottom: 1px dashed #ddd;
+            margin: 10px 0;
+        }
+        
+        .logo-placeholder {
+            color: #999;
+            font-style: italic;
+        }
+        
+        .logo-upload {
+            margin-top: 10px;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .preview-section, .preview-section * {
+                visibility: visible;
+            }
+            .preview-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                padding: 0;
+                margin: 0;
+            }
+            .memo-preview {
+                border: none;
+                box-shadow: none;
+                padding: 20px;
+            }
+            .print-btn, .input-section, button {
+                display: none;
+            }
+        }
